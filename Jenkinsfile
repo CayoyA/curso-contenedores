@@ -6,13 +6,12 @@ pipeline {
                 sh 'echo "saludos desde el terminal"'
             }
         }
-        stage('Test') {
+        stage('Segundo paso a paso pipeline') {
             steps {
-                sh 'echo "Testing..."'
-                // Add your test steps here
-            }
+                sh 'echo "node --version"'
+           }
         }
-        stage('Deploy') {
+        stage('Tercer paso pipeline') {
             steps {
                 sh 'echo "Deploying..."'
                 // Add your deploy steps here

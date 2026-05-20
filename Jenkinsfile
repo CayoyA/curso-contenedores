@@ -1,6 +1,8 @@
 pipeline {
-    agent any
-    stages{
+    agent {
+        label 'container'
+    }
+        stages{
         stage('Primer paso pipeline') {
             steps {
                 sh 'echo "saludos desde el terminal"'

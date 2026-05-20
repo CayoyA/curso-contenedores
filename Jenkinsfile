@@ -17,14 +17,14 @@ pipeline {
                         '''
                     }
                 }
-                stage('CI -Instalacion de dependencias') {
+                stage('CI - Instalacion de dependencias') {
                     steps {
                         sh '''
                         pnpm install
                         '''
                     }
                 }
-                stage('CI - Revision de Linter'){
+                stage('CI - Revision de linter'){
                     steps {
                         sh '''
                         pnpm lint

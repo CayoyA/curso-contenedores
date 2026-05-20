@@ -2,7 +2,7 @@ pipeline {
     agent {
         label 'wsl'
     }
-        stages{
+    stages {
         stage('Primer paso pipeline') {
             steps {
                 sh 'echo "saludos desde el terminal"'
@@ -31,4 +31,7 @@ pipeline {
             steps {
                 sh 'node --version'
             }
+        }
+    }
+
 }

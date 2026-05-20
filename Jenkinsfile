@@ -3,12 +3,12 @@ pipeline {
     
     environment {
         IMAGE_NAME = 'curso-contenedores'
-        // Usamos comillas dobles para que reconozca el valor de IMAGE_NAME
         DH_REPO    = "cayoya/${env.IMAGE_NAME}"
         GH_REPO    = "ghcr.io/cayoya/${env.IMAGE_NAME}"
     }
     
     stages {
+        // --- BLOQUE 1: TODO LO QUE SE HACE CON PNPM/NODE ---
         stage('CI de nuestra aplicacion de contenedores') {
             agent {
                 docker {
@@ -46,26 +46,30 @@ pipeline {
                         '''
                     }
                 } 
-                stage('CD - Empaquetado y distribucion') {
-                    steps {
-                        script {
-                            sh '''
-                                docker build -t ${env.IMAGE_NAME} .
-                                docker tag ${env.IMAGE_NAME} ${env.DH_REPO}
-                                docker tag ${env.IMAGE_NAME} ${env.GH_REPO}
-                            '''
-                            
-                            docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credential') {
-                                sh "docker push ${env.DH_REPO}"
-                            }
-                            
-                            docker.withRegistry('https://ghcr.io', 'github-credential') {
-                                sh "docker push ${env.GH_REPO}"
-                            }
-                        }
+            }
+        } // Fin del bloque pnpm
+
+        // --- BLOQUE 2: EMPAQUETADO DOCKER (Fuera del contenedor de pnpm) ---
+        stage('CD - Empaquetado y distribucion') {
+            agent { label 'docker' } // Corre directo en el host que tiene Docker instalado
+            steps {
+                script {
+                    // En Linux usamos $IMAGE_NAME, $DH_REPO y $GH_REPO directamente
+                    sh '''
+                        docker build -t $IMAGE_NAME .
+                        docker tag $IMAGE_NAME $DH_REPO
+                        docker tag $IMAGE_NAME $GH_REPO
+                    '''
+                    
+                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credential') {
+                        sh "docker push ${env.DH_REPO}"
+                    }
+                    
+                    docker.withRegistry('https://ghcr.io', 'github-credential') {
+                        sh "docker push ${env.GH_REPO}"
                     }
                 }
             }
         }
     }
-}
+} 

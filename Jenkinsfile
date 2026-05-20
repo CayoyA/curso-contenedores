@@ -1,6 +1,5 @@
 pipeline {
     agent none
-
     stages {
         stage('CI de nuestra aplicacion de contenedores') {
             agent{
@@ -10,25 +9,25 @@ pipeline {
                 }
             }
             stages{
-                stage ('CI - Instalacion de dependencias') {
-                    steps {
+                stage ('CI - Configuracion de pnpm y node') {
+                   steps {
                         sh '''
-                            pnpm runtime set node 24 --global
-                            pnpm --version                    
-                            pnpm install
-
-                            echo "--- Corriendo validación de código (Linter) ---"
-                            pnpm lint
-                            
-                            echo "--- Corriendo Pruebas Unitarias (Tests) ---"
-                            pnpm test
+                        pnpm runtime set node 24 --global
+                        pnpm --version
                         '''
                     }
-                } 
-                stage ('CI - Revision de linter') {
+                }
+                stage('CI -Instalacion de dependencias') {
                     steps {
                         sh '''
-                            pnpm lint
+                        pnpm install
+                        '''
+                    }
+                }
+                stage('CI - Revision de Linter'){
+                    steps {
+                        sh '''
+                        pnpm lint
                         '''
                     }
                 }

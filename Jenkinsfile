@@ -15,8 +15,7 @@ pipeline {
         }
         stage('Tercer paso pipeline') {
             steps {
-                sh 'echo "Deploying..."'
-                // Add your deploy steps here
+                sh 'docker ps'
             }
         }
     }

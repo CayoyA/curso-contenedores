@@ -16,6 +16,12 @@ pipeline {
                             pnpm runtime set node 24 --global
                             pnpm --version                    
                             pnpm install
+
+                            echo "--- Corriendo validación de código (Linter) ---"
+                            pnpm lint
+                            
+                            echo "--- Corriendo Pruebas Unitarias (Tests) ---"
+                            pnpm test
                         '''
                     }
                 } 

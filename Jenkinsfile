@@ -1,19 +1,22 @@
 pipeline {
     agent none
+    
     environment {
         IMAGE_NAME = 'curso-contenedores'
-        DH_REPO = 'cayoya/${env.IMAGE_NAME}'
-        GH_REPO = 'ghcr.io/cayoya/${env.IMAGE_NAME}'
+        // Usamos comillas dobles para que reconozca el valor de IMAGE_NAME
+        DH_REPO    = "cayoya/${env.IMAGE_NAME}"
+        GH_REPO    = "ghcr.io/cayoya/${env.IMAGE_NAME}"
     }
+    
     stages {
         stage('CI de nuestra aplicacion de contenedores') {
-            agent{
+            agent {
                 docker {
                      image 'ghcr.io/pnpm/pnpm:latest'
                      label 'docker'
                 }
             }
-            stages{
+            stages {
                 stage('CI - Configuracion de pnpm y node') {
                     steps {
                         sh '''
@@ -44,24 +47,25 @@ pipeline {
                     }
                 } 
                 stage('CD - Empaquetado y distribucion') {
-                    agent { label 'docker' }
                     steps {
-                        sh '''
-                            docker build -t ${env.IMAGE_NAME} .
-                            docker tag ${env.IMAGE_NAME} ${env.DH_REPO}
-                            docker tag ${env.IMAGE_NAME} ${env.GH_REPO}
-                        '''
-                    }
-                    script {
-                        docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credential') {
-                            sh "docker push ${env.DH_REPO}"
-                        }
-                        docker.withRegistry('https://ghcr.io', 'github-credential') {
-                            sh "docker push ${env.GH_REPO}"
+                        script {
+                            sh '''
+                                docker build -t ${env.IMAGE_NAME} .
+                                docker tag ${env.IMAGE_NAME} ${env.DH_REPO}
+                                docker tag ${env.IMAGE_NAME} ${env.GH_REPO}
+                            '''
+                            
+                            docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credential') {
+                                sh "docker push ${env.DH_REPO}"
+                            }
+                            
+                            docker.withRegistry('https://ghcr.io', 'github-credential') {
+                                sh "docker push ${env.GH_REPO}"
+                            }
                         }
                     }
                 }
-            }           
+            }
         }
     }
 }

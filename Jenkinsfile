@@ -25,7 +25,21 @@ pipeline {
                         '''
                     }
                 } 
-            }
+                stage ('CI - Revision de linter') {
+                    steps {
+                        sh '''
+                            pnpm lint
+                        '''
+                    }
+                }
+                stage ('CI - Ejecucion de build') {
+                    steps {
+                        sh '''
+                            pnpm build
+                        '''
+                    }
+                }
+            }    
         }
     }
 }

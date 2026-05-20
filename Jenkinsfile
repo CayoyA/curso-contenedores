@@ -14,9 +14,9 @@ pipeline {
                     steps {
                         sh '''
                             pnpm install
-                    '''
-                }
-             
+                        '''
+                    }
+                } 
             }
         }
     }

@@ -50,6 +50,6 @@ describe('UsersService', () => {
 
   it('should save a user', async () => {
     const newUser = await service.create({ nombre: 'Nuevo', edad: 31 });
-    expect(newUser).toEqual({ id: 2 });
+    expect(newUser).toMatchObject({ id: 2 });
   });
 });

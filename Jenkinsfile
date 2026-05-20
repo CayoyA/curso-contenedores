@@ -55,6 +55,11 @@ pipeline {
             steps {
                 script {
                     // En Linux usamos $IMAGE_NAME, $DH_REPO y $GH_REPO directamente
+                    sh '''echo "${env.IMAGE_NAME}"'''
+                    sh '''echo "${env.DH_REPO}"'''
+                    sh '''echo "${env.GH_REPO}"'''
+
+
                     sh '''
                         docker build -t $IMAGE_NAME .
                         docker tag $IMAGE_NAME $DH_REPO

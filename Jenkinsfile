@@ -9,10 +9,11 @@ pipeline {
                      label 'docker'
                 }
             }
-                   stages{
+            stages{
                 stage ('CI - Instalacion de dependencias') {
-                    sh '''
-                        pnpm install
+                    steps {
+                        sh '''
+                            pnpm install
                     '''
                 }
              

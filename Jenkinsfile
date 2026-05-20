@@ -10,7 +10,7 @@ pipeline {
         }
         stage('Segundo paso a paso pipeline') {
             steps {
-                sh 'echo "node --version"'
+                sh "node --version"
            }
         }
         stage('Tercer paso pipeline') {

@@ -3,8 +3,8 @@ pipeline {
     
     environment {
         IMAGE_NAME = 'curso-contenedores'
-        DH_REPO    = "cayoya/${env.IMAGE_NAME}"
-        GH_REPO    = "ghcr.io/cayoya/${env.IMAGE_NAME}"
+        DH_REPO    = "cayoya/${IMAGE_NAME}"
+        GH_REPO    = "ghcr.io/cayoya/${IMAGE_NAME}"
     }
     
     stages {

@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'container'
+        label 'wsl'
     }
         stages{
         stage('Primer paso pipeline') {

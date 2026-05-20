@@ -2,13 +2,14 @@ pipeline {
     agent none
     
     environment {
+        // Definimos los textos fijos para que Jenkins no intente interpolar en el arranque
         IMAGE_NAME = 'curso-contenedores'
-        DH_REPO    = "cayoya/${IMAGE_NAME}"
-        GH_REPO    = "ghcr.io/cayoya/${IMAGE_NAME}"
+        DH_REPO    = 'cayoya/curso-contenedores'
+        GH_REPO    = 'ghcr.io/cayoya/curso-contenedores'
     }
     
     stages {
-        // --- BLOQUE 1: TODO LO QUE SE HACE CON PNPM/NODE ---
+        // --- BLOQUE 1: CI (PNPM / NODE) ---
         stage('CI de nuestra aplicacion de contenedores') {
             agent {
                 docker {
@@ -47,25 +48,21 @@ pipeline {
                     }
                 } 
             }
-        } // Fin del bloque pnpm
+        } // Fin del bloque CI
 
-        // --- BLOQUE 2: EMPAQUETADO DOCKER (Fuera del contenedor de pnpm) ---
+        // --- BLOQUE 2: CD (EMPAQUETADO DOCKER EN EL HOST) ---
         stage('CD - Empaquetado y distribucion') {
-            agent { label 'docker' } // Corre directo en el host que tiene Docker instalado
+            agent { label 'docker' } 
             steps {
                 script {
-                    // En Linux usamos $IMAGE_NAME, $DH_REPO y $GH_REPO directamente
-                    sh '''echo "${env.IMAGE_NAME}"'''
-                    sh '''echo "${env.DH_REPO}"'''
-                    sh '''echo "${env.GH_REPO}"'''
-
-
+                    // En las comillas triples simples de Linux usamos el símbolo $ directo para las variables del sistema
                     sh '''
                         docker build -t $IMAGE_NAME .
                         docker tag $IMAGE_NAME $DH_REPO
                         docker tag $IMAGE_NAME $GH_REPO
                     '''
                     
+                    // Aquí usamos las variables inyectadas mediante comillas dobles usando el objeto env nativo de Jenkins
                     docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credential') {
                         sh "docker push ${env.DH_REPO}"
                     }
@@ -76,5 +73,5 @@ pipeline {
                 }
             }
         }
-    }
-} 
+    } // Fin de todos los stages
+} // Fin del pipeline

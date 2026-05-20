@@ -9,6 +9,9 @@ pipeline {
             }
         }
         stage('Segundo paso a paso pipeline') {
+            agent {
+                label 'container'
+            }   
             steps {
                 sh "node --version"
            }

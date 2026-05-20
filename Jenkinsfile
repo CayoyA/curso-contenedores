@@ -74,4 +74,4 @@ pipeline {
             }
         }
     } // Fin de todos los stages
-} // Fin del pipeline
+}

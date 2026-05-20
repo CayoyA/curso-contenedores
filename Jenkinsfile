@@ -39,6 +39,19 @@ pipeline {
                     }
                 }
             }    
+                stage('CD - Empaquetado y distribucion') {
+                    agent {
+                        docker {
+                            image 'docker:latest'
+                            label 'docker'
+                            args '-v /var/run/docker.sock:/var/run/docker.sock'
+                        }
+                    }
+                    steps {
+                        sh '''
+                        docker build -t mi-aplicacion:latest .
+                        '''
+                    }
         }
     }
 }

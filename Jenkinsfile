@@ -37,21 +37,16 @@ pipeline {
                             pnpm build
                         '''
                     }
-                }
-            }    
+                } 
                 stage('CD - Empaquetado y distribucion') {
-                    agent {
-                        docker {
-                            image 'docker:latest'
-                            label 'docker'
-                            args '-v /var/run/docker.sock:/var/run/docker.sock'
-                        }
-                    }
+                    agent { label 'docker' }
                     steps {
                         sh '''
-                        docker build -t mi-aplicacion:latest .
+                        docker build -t curso-contenedores .
                         '''
                     }
+                }
+            }           
         }
     }
 }

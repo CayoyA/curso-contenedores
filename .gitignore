@@ -48,3 +48,12 @@ pids
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Ignorar todos los archivos comprimidos zip
+*.zip
+
+# Ignorar todos los videos MP4
+*.mp4
+
+# Opcional: Si tienes una carpeta específica con este contenido y quieres ignorarla entera:
+# nombre_de_tu_carpeta/

@@ -97,16 +97,13 @@ pipeline {
             agent {
                 docker {
                     image 'alpine/k8s:1.34.1'
-                    args '--add-host=jenkins.local:host-gateway'
+                    args '--add-host=kubernetes.docker.internal:host-gateway'
                 }
             }
             steps {
                 script {
-                    withKubeConfig([credentialsId: 'kubernetes-config']){
-                        sh '''
-                            kubectl -n ${K8S_NAMESPACE} set image deployment/${IMAGE_NAME} ${IMAGE_NAME}=${DH_REPO}:${APP_SEMANTIC_VERSION}
-                            kubectl -n ${K8S_NAMESPACE} rollout status deployment/${IMAGE_NAME}
-                        '''
+                    withKubeConfig([credentialsId: 'kubernetes-config', serverUrl: 'https://kubernetes.docker.internal:6443']) {
+                        sh "kubectl -n curso-contenedores set image deployment/curso-contenedores 'curso-contenedores=cayoya/curso-contenedores:${VERSION}'"
                     }
                 }
             }

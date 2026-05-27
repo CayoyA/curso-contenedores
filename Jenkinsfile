@@ -97,6 +97,7 @@ pipeline {
             agent {
                 docker {
                     image 'alpine/k8s:1.34.1'
+                    args '--add-host=jenkins.local:host-gateway'
                 }
             }
             steps {
